@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Scr\Api\Controllers\" />
+    <Folder Include="Scr\Api\Dtos\" />
+    <Folder Include="Scr\Application\Commands\" />
+    <Folder Include="Scr\Application\Handlers\" />
+    <Folder Include="Scr\Application\Services\" />
+    <Folder Include="Scr\Application\Queries\" />
+    <Folder Include="Scr\CrossCutting\Loggins\" />
+    <Folder Include="Scr\CrossCutting\Notifications\" />
+    <Folder Include="Scr\CrossCutting\Security\" />
+    <Folder Include="Scr\Domain\Entities\" />
+    <Folder Include="Scr\Domain\Enums\" />
+    <Folder Include="Scr\Domain\Services\" />
+    <Folder Include="Scr\Domain\ValuesObjects\" />
+    <Folder Include="Scr\Infraestructure\Data\" />
+    <Folder Include="Scr\Infraestructure\Migrations\" />
+    <Folder Include="Scr\Infraestructure\Configurations\" />
+    <Folder Include="Scr\Infraestructure\Repositories\" />
+    <Folder Include="Tests\" />
+  </ItemGroup>
+
+</Project>
