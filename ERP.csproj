@@ -7,12 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.20" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Scr\Api\Controllers\" />
-    <Folder Include="Scr\Api\Dtos\" />
     <Folder Include="Scr\Application\Commands\" />
     <Folder Include="Scr\Application\Handlers\" />
     <Folder Include="Scr\Application\Services\" />
@@ -20,14 +26,11 @@
     <Folder Include="Scr\CrossCutting\Loggins\" />
     <Folder Include="Scr\CrossCutting\Notifications\" />
     <Folder Include="Scr\CrossCutting\Security\" />
-    <Folder Include="Scr\Domain\Entities\" />
     <Folder Include="Scr\Domain\Enums\" />
-    <Folder Include="Scr\Domain\Services\" />
     <Folder Include="Scr\Domain\ValuesObjects\" />
-    <Folder Include="Scr\Infraestructure\Data\" />
     <Folder Include="Scr\Infraestructure\Migrations\" />
     <Folder Include="Scr\Infraestructure\Configurations\" />
-    <Folder Include="Scr\Infraestructure\Repositories\" />
+    <Folder Include="Scr\Infraestructure\Repositories\Interfaces\" />
     <Folder Include="Tests\" />
   </ItemGroup>
 
