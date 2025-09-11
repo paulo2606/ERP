@@ -1,8 +1,8 @@
-﻿using ERP.Scr.Domain.Entities;
+﻿using ERP.Src.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ERP.Scr.Domain.Entities
+namespace ERP.Src.Domain.Entities
 {
     [Table("TAB_Permissao", Schema = "dbo")]
     public class Permissao

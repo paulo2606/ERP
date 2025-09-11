@@ -1,5 +1,6 @@
-﻿using ERP.Scr.Domain.Entities;
-using ERP.Scr.Infraestructure.Data;
+﻿using ERP.Src.Domain.Entities;
+using ERP.Src.Infraestructure.Data;
+using ERP.Src.Application.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace ERP.Src.Application.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;

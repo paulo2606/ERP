@@ -19,18 +19,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Scr\Application\Commands\" />
-    <Folder Include="Scr\Application\Handlers\" />
-    <Folder Include="Scr\Application\Services\" />
-    <Folder Include="Scr\Application\Queries\" />
-    <Folder Include="Scr\CrossCutting\Loggins\" />
-    <Folder Include="Scr\CrossCutting\Notifications\" />
-    <Folder Include="Scr\CrossCutting\Security\" />
-    <Folder Include="Scr\Domain\Enums\" />
-    <Folder Include="Scr\Domain\ValuesObjects\" />
-    <Folder Include="Scr\Infraestructure\Migrations\" />
-    <Folder Include="Scr\Infraestructure\Configurations\" />
-    <Folder Include="Scr\Infraestructure\Repositories\Interfaces\" />
+    <Folder Include="Src\Application\Commands\" />
+    <Folder Include="Src\Application\Handlers\" />
+    <Folder Include="Src\Application\Queries\" />
+    <Folder Include="Src\CrossCutting\Loggins\" />
+    <Folder Include="Src\CrossCutting\Notifications\" />
+    <Folder Include="Src\CrossCutting\Security\" />
+    <Folder Include="Src\Domain\Enums\" />
+    <Folder Include="Src\Domain\Services\" />
+    <Folder Include="Src\Domain\ValuesObjects\" />
+    <Folder Include="Src\Infraestructure\Migrations\" />
+    <Folder Include="Src\Infraestructure\Configurations\" />
+    <Folder Include="Src\Infraestructure\Repositories\Interfaces\" />
     <Folder Include="Tests\" />
   </ItemGroup>
 

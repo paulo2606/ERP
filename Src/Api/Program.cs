@@ -1,5 +1,7 @@
-using ERP.Scr.Infraestructure.Data;
+using ERP.Src.Infraestructure.Data;
 using ERP.Src.Application.Services;
+using ERP.Src.Application.Services.Interface;
+using ERP.Src.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -27,7 +29,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Add services to the container.
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

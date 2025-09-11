@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ERP.Src.Domain.Entities;
 
-namespace ERP.Scr.Domain.Entities
+namespace ERP.Src.Domain.Entities
 {
     [Table("TAB_Empresa", Schema = "dbo")]
     public class Empresas
@@ -17,7 +18,7 @@ namespace ERP.Scr.Domain.Entities
 
         [Required]
         [Column("Num_CNPJ", TypeName = "numeric(14,0)")]
-        public decimal NumCnpj { get; set; }
+        public string NumCnpj { get; set; }
 
         [Required]
         [MaxLength(250)]
@@ -61,9 +62,9 @@ namespace ERP.Scr.Domain.Entities
         [Column("Flg_Inativo")]
         public bool FlgInativo { get; set; }
 
-        // Navegação
-        //public NaturezaJuridica NaturezaJuridica { get; set; } = null!;
-        //public TipoVinculoEmpresa TipoVinculoEmpresa { get; set; } = null!;
-        //public Endereco Endereco { get; set; } = null!;
+        //nav
+        public NaturezaJuridica NaturezaJuridica { get; set; } = null!;
+        public TipoVinculoEmpresa TipoVinculoEmpresa { get; set; } = null!;
+        public Endereco Endereco { get; set; } = null!;
     }
 }
