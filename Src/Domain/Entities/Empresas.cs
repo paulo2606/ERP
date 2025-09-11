@@ -17,8 +17,8 @@ namespace ERP.Src.Domain.Entities
         public string NomeFantasia { get; set; } = null!;
 
         [Required]
-        [Column("Num_CNPJ", TypeName = "numeric(14,0)")]
-        public string NumCnpj { get; set; }
+        [Column("Num_CNPJ")]
+        public decimal NumCnpj { get; set; }
 
         [Required]
         [MaxLength(250)]
@@ -44,10 +44,12 @@ namespace ERP.Src.Domain.Entities
         [ForeignKey("Endereco")]
         public int IdEndereco { get; set; }
 
-        [Column("Num_DDD_Telefone", TypeName = "char(2)")]
+        [Column("Num_DDD_Telefone")]
+        [MaxLength(2)]
         public string? NumDddTelefone { get; set; }
 
-        [Column("Num_Telefone", TypeName = "char(10)")]
+        [Column("Num_Telefone")]
+        [MaxLength(10)]
         public string? NumTelefone { get; set; }
 
         [Required]
