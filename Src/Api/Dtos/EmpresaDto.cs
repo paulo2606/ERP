@@ -3,7 +3,7 @@
     public class EmpresaCreateDto
     {
         public string NomeFantasia { get; set; } = null!;
-        public string NumCnpj { get; set; } = null!;
+        public decimal NumCnpj { get; set; }
         public string RazaoSocial { get; set; } = null!;
         public string? EmailEmpresa { get; set; }
         public int IdNaturezaJuridica { get; set; }
@@ -23,7 +23,7 @@
         public int IdEmpresa { get; set; }
         public string NomeFantasia { get; set; } = null!;
         public string RazaoSocial { get; set; } = null!;
-        public string NumCnpj { get; set; } = null!;
+        public decimal NumCnpj { get; set; }
         public string? EmailEmpresa { get; set; }
         public bool FlgInativo { get; set; }
     }

@@ -16,6 +16,24 @@ namespace ERP.Src.Infraestructure.Data
         public DbSet<Cidade> Cidades { get; set; }
         public DbSet<Estado> Estados { get; set; }
         public DbSet<Regiao> Regioes { get; set; }
+        public DbSet<Permissao> Permissoes { get; set; }
+        public DbSet<NivelAcesso> NiveisAcesso { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Empresas>()
+                .Property(e => e.NumCnpj)
+                .HasColumnType("numeric(14,0)");
+
+            modelBuilder.Entity<Empresas>()
+                .Property(e => e.NumDddTelefone)
+                .HasColumnType("char(2)");
+
+            modelBuilder.Entity<Empresas>()
+                .Property(e => e.NumTelefone)
+                .HasColumnType("char(10)");
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
