@@ -22,6 +22,9 @@ namespace ERP.Src.Infraestructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Empresas>()
+                .HasQueryFilter(e => !e.FlgInativo);
+
+            modelBuilder.Entity<Empresas>()
                 .Property(e => e.NumCnpj)
                 .HasColumnType("numeric(14,0)");
 

@@ -34,42 +34,35 @@ namespace ERP.Src.Api.Controllers
         [HttpGet("buscar-empresa/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var empresa = await _empresaService.GetByIdAsync(id);
-            if (empresa == null) return NotFound();
+            var empresa = await _empresaService.GetEmpresaByIdAsync(id);
+
+            if (empresa == null)
+                return NotFound(new { message = "Empresa não encontrada" });
+
             return Ok(empresa);
         }
 
         [HttpPut("atualiza-empresa/{id}")]
-        public async Task<IActionResult> Update(int id, EmpresaUpdateDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] EmpresaUpdateDto empresaDto)
         {
-            if (id != dto.IdEmpresa) return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var empresa = new Empresas
-            {
-                IdEmpresa = dto.IdEmpresa,
-                NomeFantasia = dto.NomeFantasia,
-                NumCnpj = dto.NumCnpj,
-                RazaoSocial = dto.RazaoSocial,
-                EmailEmpresa = dto.EmailEmpresa,
-                IdNaturezaJuridica = dto.IdNaturezaJuridica,
-                IdTipoVinculoEmpresa = dto.IdTipoVinculoEmpresa,
-                IdEndereco = dto.IdEndereco,
-                NumDddTelefone = dto.NumDddTelefone,
-                NumTelefone = dto.NumTelefone
-            };
+            var updated = await _empresaService.UpdateEmpresaAsync(id, empresaDto);
 
-            var atualizada = await _empresaService.UpdateAsync(empresa);
-            if (atualizada == null) return NotFound();
+            if (!updated)
+                return NotFound(new { message = "Empresa não encontrada" });
 
-            return Ok(atualizada);
+            return Ok("Empresa Atualizada!");
         }
 
         [HttpDelete("soft-delete{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _empresaService.DeleteAsync(id);
-            if (!result) return NotFound();
-            return NoContent();
+            if (!result) return NotFound( new { mensage = "Empresa não encontrada " });
+
+            return Ok("Empresa Deletada!");
         }
     }
 }

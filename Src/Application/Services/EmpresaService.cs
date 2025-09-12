@@ -42,35 +42,84 @@ namespace ERP.Src.Application.Services
             return empresa;
         }
 
-
-        public async Task<IEnumerable<Empresas>> GetAllAsync()
+        public async Task<IEnumerable<EmpresaResponseDto>> GetAllAsync()
         {
-            return await _context.Empresas.ToListAsync();
+            var empresas = await _context.Empresas
+                .Include(e => e.NaturezaJuridica)
+                .Include(e => e.TipoVinculoEmpresa)
+                .Include(e => e.Endereco)
+                    .ThenInclude(end => end.Cidade)
+                        .ThenInclude(c => c.Estado)
+                            .ThenInclude(est => est.Regiao)
+                .Select(e => new EmpresaResponseDto
+                {
+                    IdEmpresa = e.IdEmpresa,
+                    NomeFantasia = e.NomeFantasia,
+                    RazaoSocial = e.RazaoSocial,
+                    NumCnpj = e.NumCnpj,
+                    EmailEmpresa = e.EmailEmpresa,
+                    NaturezaJuridica = e.NaturezaJuridica.NomeNaturezaJuridica,
+                    TipoVinculo = e.TipoVinculoEmpresa.NomeTipoVinculoEmpresa,
+                    Endereco = e.Endereco.Logradouro + ", " + e.Endereco.Numero,
+                    Cidade = e.Endereco.Cidade.NomeCidade,
+                    Estado = e.Endereco.Cidade.Estado.NomeEstado,
+                    Regiao = e.Endereco.Cidade.Estado.Regiao.NomeRegiao
+                })
+                .ToListAsync(); 
+
+            return (empresas);
         }
 
-        public async Task<Empresas?> GetByIdAsync(int id)
+        public async Task<EmpresaResponseDto?> GetEmpresaByIdAsync(int id)
         {
-            return await _context.Empresas.FindAsync(id);
+            var empresa = await _context.Empresas
+                .Include(e => e.NaturezaJuridica)
+                .Include(e => e.TipoVinculoEmpresa)
+                .Include(e => e.Endereco)
+                    .ThenInclude(end => end.Cidade)
+                        .ThenInclude(c => c.Estado)
+                            .ThenInclude(est => est.Regiao)
+                .FirstOrDefaultAsync(e => e.IdEmpresa == id);
+
+            if (empresa == null)
+                return null;
+
+            return new EmpresaResponseDto
+            {
+                IdEmpresa = empresa.IdEmpresa,
+                NomeFantasia = empresa.NomeFantasia,
+                RazaoSocial = empresa.RazaoSocial,
+                NumCnpj = empresa.NumCnpj,
+                EmailEmpresa = empresa.EmailEmpresa,
+                NaturezaJuridica = empresa.NaturezaJuridica.NomeNaturezaJuridica,
+                TipoVinculo = empresa.TipoVinculoEmpresa.NomeTipoVinculoEmpresa,
+                Endereco = $"{empresa.Endereco.Logradouro}, {empresa.Endereco.Numero}",
+                Cidade = empresa.Endereco.Cidade.NomeCidade,
+                Estado = empresa.Endereco.Cidade.Estado.NomeEstado,
+                Regiao = empresa.Endereco.Cidade.Estado.Regiao.NomeRegiao
+            };
         }
 
-        public async Task<Empresas?> UpdateAsync(Empresas empresa)
+        public async Task<bool> UpdateEmpresaAsync(int id, EmpresaUpdateDto empresaDto)
         {
-            var existente = await _context.Empresas.FindAsync(empresa.IdEmpresa);
-            if (existente == null) return null;
+            var empresa = await _context.Empresas.FirstOrDefaultAsync(e => e.IdEmpresa == id);
+            if (empresa == null) return false;
 
-            existente.NomeFantasia = empresa.NomeFantasia;
-            existente.NumCnpj = empresa.NumCnpj;
-            existente.RazaoSocial = empresa.RazaoSocial;
-            existente.EmailEmpresa = empresa.EmailEmpresa;
-            existente.IdNaturezaJuridica = empresa.IdNaturezaJuridica;
-            existente.IdTipoVinculoEmpresa = empresa.IdTipoVinculoEmpresa;
-            existente.IdEndereco = empresa.IdEndereco;
-            existente.NumDddTelefone = empresa.NumDddTelefone;
-            existente.NumTelefone = empresa.NumTelefone;
-            existente.DataAlteracao = DateTime.Now;
+            empresa.NomeFantasia = empresaDto.NomeFantasia;
+            empresa.RazaoSocial = empresaDto.RazaoSocial;
+            empresa.NumCnpj = empresaDto.NumCnpj;
+            empresa.EmailEmpresa = empresaDto.EmailEmpresa;
+            empresa.IdNaturezaJuridica = empresaDto.IdNaturezaJuridica;
+            empresa.IdTipoVinculoEmpresa = empresaDto.IdTipoVinculoEmpresa;
+            empresa.IdEndereco = empresaDto.IdEndereco;
+            empresa.NumDddTelefone = empresaDto.NumDddTelefone;
+            empresa.NumTelefone = empresaDto.NumTelefone;
+            empresa.DataAlteracao = DateTime.Now;
 
+            _context.Empresas.Update(empresa);
             await _context.SaveChangesAsync();
-            return existente;
+
+            return true;
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -78,7 +127,9 @@ namespace ERP.Src.Application.Services
             var empresa = await _context.Empresas.FindAsync(id);
             if (empresa == null) return false;
 
-            _context.Empresas.Remove(empresa);
+            empresa.FlgInativo = true;
+
+            _context.Empresas.Update(empresa);
             await _context.SaveChangesAsync();
             return true;
         }
