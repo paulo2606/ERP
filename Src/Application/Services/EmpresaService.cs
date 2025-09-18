@@ -15,31 +15,120 @@ namespace ERP.Src.Application.Services
             _context = context;
         }
 
-
-        public async Task<Empresas> CreateAsync(EmpresaCreateDto empresaDto)
+        public async Task<EmpresaResponseDto?> CreateAsync(EmpresaCreateDto empresaDto)
         {
+            var natureza = await ObterNaturezaJuridica(empresaDto.IdNaturezaJuridica);
+            var tipoVinculo = await ObterTipoVinculoEmpresa(empresaDto.IdTipoVinculo);
+            var cidade = await ObterOuCriarCidade(empresaDto.Endereco.Cidade);
+
+            var endereco = new Endereco
+            {
+                Cep = empresaDto.Endereco.Cep,
+                Logradouro = empresaDto.Endereco.Logradouro,
+                Numero = empresaDto.Endereco.Numero,
+                Complemento = empresaDto.Endereco.Complemento,
+                Bairro = empresaDto.Endereco.Bairro,
+                IdCidade = cidade.IdCidade,
+                DataCadastro = DateTime.Now,
+                DataAlteracao = DateTime.Now,
+                FlgInativo = false
+            };
+            _context.Enderecos.Add(endereco);
+            await _context.SaveChangesAsync();
+
             var empresa = new Empresas
             {
                 NomeFantasia = empresaDto.NomeFantasia,
                 NumCnpj = empresaDto.NumCnpj,
                 RazaoSocial = empresaDto.RazaoSocial,
                 EmailEmpresa = empresaDto.EmailEmpresa,
-
-                IdNaturezaJuridica = empresaDto.IdNaturezaJuridica,
-                IdTipoVinculoEmpresa = empresaDto.IdTipoVinculoEmpresa,
-                IdEndereco = empresaDto.IdEndereco,
-
+                IdNaturezaJuridica = natureza.IdNaturezaJuridica,
+                IdTipoVinculoEmpresa = tipoVinculo.IdTipoVinculoEmpresa,
+                IdEndereco = endereco.IdEndereco,
                 NumDddTelefone = empresaDto.NumDddTelefone,
                 NumTelefone = empresaDto.NumTelefone,
                 DataCadastro = DateTime.Now,
                 DataAlteracao = DateTime.Now,
                 FlgInativo = false
             };
-
             _context.Empresas.Add(empresa);
             await _context.SaveChangesAsync();
 
-            return empresa;
+            var empresaRecemCriada = await _context.Empresas
+                .Include(e => e.NaturezaJuridica)
+                .Include(e => e.TipoVinculoEmpresa)
+                .Include(e => e.Endereco)
+                    .ThenInclude(end => end.Cidade)
+                        .ThenInclude(c => c.Estado)
+                            .ThenInclude(est => est.Regiao)
+                .FirstOrDefaultAsync(e => e.IdEmpresa == empresa.IdEmpresa);
+
+            if (empresaRecemCriada == null)
+            {
+                return null;
+            }
+
+            return new EmpresaResponseDto
+            {
+                IdEmpresa = empresaRecemCriada.IdEmpresa,
+                NomeFantasia = empresaRecemCriada.NomeFantasia,
+                RazaoSocial = empresaRecemCriada.RazaoSocial,
+                NumCnpj = empresaRecemCriada.NumCnpj,
+                EmailEmpresa = empresaRecemCriada.EmailEmpresa,
+                NaturezaJuridica = empresaRecemCriada.NaturezaJuridica.NomeNaturezaJuridica,
+                TipoVinculo = empresaRecemCriada.TipoVinculoEmpresa.NomeTipoVinculoEmpresa,
+                Endereco = $"{empresaRecemCriada.Endereco.Logradouro}, {empresaRecemCriada.Endereco.Numero}",
+                Cidade = empresaRecemCriada.Endereco.Cidade.NomeCidade,
+                Estado = empresaRecemCriada.Endereco.Cidade.Estado.NomeEstado,
+                Regiao = empresaRecemCriada.Endereco.Cidade.Estado.Regiao.NomeRegiao
+            };
+        }
+
+        private async Task<NaturezaJuridica> ObterNaturezaJuridica(int idNatureza)
+        {
+            var natureza = await _context.NaturezasJuridicas
+                .FirstOrDefaultAsync(n => n.IdNaturezaJuridica == idNatureza);
+
+            if (natureza is null)
+                throw new ArgumentException("Natureza Jurídica inválida.");
+
+            return natureza;
+        }
+
+        private async Task<TipoVinculoEmpresa> ObterTipoVinculoEmpresa(int idTipoVinculo)
+        {
+            var tipoVinculo = await _context.TiposVinculoEmpresa
+                .FirstOrDefaultAsync(t => t.IdTipoVinculoEmpresa == idTipoVinculo);
+
+            if (tipoVinculo is null)
+                throw new ArgumentException("Tipo de Vínculo inválido.");
+
+            return tipoVinculo;
+        }
+
+        private async Task<Cidade> ObterOuCriarCidade(CidadeCreateDto cidadeDto)
+        {
+            var cidade = await _context.Cidades
+                .FirstOrDefaultAsync(c =>
+                    c.NomeCidade == cidadeDto.NomeCidade &&
+                    c.IdEstado == cidadeDto.IdEstado);
+
+            if (cidade is not null)
+                return cidade;
+
+            var novaCidade = new Cidade
+            {
+                NomeCidade = cidadeDto.NomeCidade,
+                SiglaEstado = cidadeDto.SiglaEstado,
+                IdEstado = cidadeDto.IdEstado,
+                DataCadastro = DateTime.Now,
+                FlgInativo = false
+            };
+
+            _context.Cidades.Add(novaCidade);
+            await _context.SaveChangesAsync();
+
+            return novaCidade;
         }
 
         public async Task<IEnumerable<EmpresaResponseDto>> GetAllAsync()

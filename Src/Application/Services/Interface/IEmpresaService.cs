@@ -5,7 +5,7 @@ namespace ERP.Src.Application.Services.Interface
 {
     public interface IEmpresaService
     {
-        Task<Empresas> CreateAsync(EmpresaCreateDto empresaDto);
+        Task<EmpresaResponseDto?> CreateAsync(EmpresaCreateDto empresaDto);
         Task<IEnumerable<EmpresaResponseDto>> GetAllAsync();
         Task<EmpresaResponseDto?> GetEmpresaByIdAsync(int id);
         Task<bool> UpdateEmpresaAsync(int id, EmpresaUpdateDto empresaDto);
