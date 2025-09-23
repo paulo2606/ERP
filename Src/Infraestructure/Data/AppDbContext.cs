@@ -1,6 +1,7 @@
 ﻿using ERP.Src.Domain.Entities;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace ERP.Src.Infraestructure.Data
 {
@@ -9,6 +10,7 @@ namespace ERP.Src.Infraestructure.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Empresas> Empresas { get; set; }
+        public DbSet<Lancamento> Lancamentos { get; set; }
         public DbSet<Login> Login { get; set; }
         public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<NaturezaJuridica> NaturezasJuridicas { get; set; }

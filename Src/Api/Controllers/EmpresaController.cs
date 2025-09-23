@@ -8,6 +8,7 @@ namespace ERP.Src.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class EmpresaController : ControllerBase
     {
         private readonly IEmpresaService _empresaService;

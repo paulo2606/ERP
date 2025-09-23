@@ -1,52 +1,46 @@
-﻿using ERP.Src.Application.Services;
-using ERP.Src.Api.DTO;
+﻿using ERP.Src.Api.DTO;
 using ERP.Src.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ERP.Src.Api.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    private readonly IAuthService _authService;
+
+    public AuthController(IAuthService authService)
     {
-        private readonly IAuthService _authService;
+        _authService = authService;
+    }
 
-        public AuthController(IAuthService authService)
+    [AllowAnonymous]
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterDto dto)
+    {
+        try
         {
-            _authService = authService;
+            var usuario = await _authService.RegisterAsync(dto.NomeLogin, dto.EmailLogin, dto.Senha, dto.IdPermissao, dto.IdNivelAcesso);
+            return Ok(new { usuario.IdLogin, usuario.NomeLogin, usuario.EmailLogin });
         }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto dto)
+        catch (Exception ex)
         {
-            try
-            {
-                var usuario = await _authService.RegisterAsync(dto.NomeLogin, dto.EmailLogin, dto.Senha, dto.IdPermissao, dto.IdNivelAcesso);
-                return Ok(new { usuario.IdLogin, usuario.NomeLogin, usuario.EmailLogin });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { mensagem = ex.Message });
-            }
+            return BadRequest(new { mensagem = ex.Message });
         }
+    }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto dto)
+    [AllowAnonymous]
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+    {
+        try
         {
-            try
-            {
-                var token = await _authService.LoginAsync(dto.EmailLogin, dto.Senha);
-                return Ok(new AuthResponseDto
-                {
-                    Token = token,
-                    NomeLogin = dto.EmailLogin,
-                    EmailLogin = dto.EmailLogin
-                });
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(new { mensagem = ex.Message });
-            }
+            var token = await _authService.LoginAsync(loginDto.EmailLogin, loginDto.Senha);
+            return Ok(new { token });
+        }
+        catch (Exception ex)
+        {
+            return Unauthorized(new { mensagem = ex.Message });
         }
     }
 }
