@@ -21,7 +21,7 @@ namespace ERP.Src.Api.Controllers
         private int GetUserId() =>
             int.Parse(User.FindFirst("id")?.Value ?? "0");
 
-        [HttpGet]
+        [HttpGet("lista-categoria")]
         public async Task<IActionResult> GetAll()
         {
             var categorias = await _categoriaService.GetAllAsync();
@@ -36,7 +36,7 @@ namespace ERP.Src.Api.Controllers
             return Ok(categoria);
         }
 
-        [HttpPost("lista-categoria")]
+        [HttpPost("cria-categoria")]
         public async Task<IActionResult> Create(CreateCategoriaDto dto)
         {
             var userId = GetUserId();
