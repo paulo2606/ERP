@@ -9,6 +9,6 @@ namespace ERP.Src.Application.Services.Interfaces
         Task<LancamentoDto?> GetByIdAsync(int id);
         Task<IEnumerable<LancamentoDto>> GetAllAsync();
         Task<LancamentoDto?> UpdateAsync(int id, UpdateLancamentoDto dto, int userId);
-        Task<bool> SoftDeleteAsync(int id, int idUsuario);
+        Task<bool> SoftDeleteAsync(int id, int userId);
     }
 }

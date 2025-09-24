@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ERP.Src.Domain.Entities
 {
-    [Table("Lancamento")]
+    [Table("TAB_Lancamento", Schema = "dbo")]
     public class Lancamento
     {
         [Key]
