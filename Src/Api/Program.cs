@@ -35,6 +35,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<ILancamentoService, LancamentoService>();
+builder.Services.AddScoped<ICentroCustoService, CentroCustoService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
