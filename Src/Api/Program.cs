@@ -38,6 +38,8 @@ builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<ILancamentoService, LancamentoService>();
 builder.Services.AddScoped<ICentroCustoService, CentroCustoService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IHistoricoAlteracaoService, HistoricoAlteracaoService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

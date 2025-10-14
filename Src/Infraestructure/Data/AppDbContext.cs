@@ -10,6 +10,7 @@ namespace ERP.Src.Infraestructure.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Empresas> Empresas { get; set; }
+        public DbSet<HistoricoAlteracao> HistoricoAlteracao { get; set; }
         public DbSet<Lancamento> Lancamentos { get; set; }
         public DbSet<CentroCusto> CentroCusto { get; set; }
         public DbSet<Categoria> Categoria { get; set; } 

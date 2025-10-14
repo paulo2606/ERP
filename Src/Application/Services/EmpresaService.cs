@@ -1,5 +1,6 @@
 ﻿using ERP.Src.Api.Dtos;
 using ERP.Src.Application.Services.Interface;
+using ERP.Src.Application.Services.Interfaces;
 using ERP.Src.Domain.Entities;
 using ERP.Src.Infraestructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +10,12 @@ namespace ERP.Src.Application.Services
     public class EmpresaService : IEmpresaService
     {
         private readonly AppDbContext _context;
+        private readonly IHistoricoAlteracaoService _historicoService;
 
-        public EmpresaService(AppDbContext context)
+        public EmpresaService(AppDbContext context, IHistoricoAlteracaoService historicoService)
         {
             _context = context;
+            _historicoService = historicoService;
         }
 
         public async Task<EmpresaResponseDto?> CreateAsync(EmpresaCreateDto empresaDto)
