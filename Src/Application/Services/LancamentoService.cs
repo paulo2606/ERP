@@ -1,4 +1,5 @@
 ﻿using ERP.Src.Api.Dtos;
+using ERP.Src.Application.Helper;
 using ERP.Src.Application.Services.Interfaces;
 using ERP.Src.Domain.Entities;
 using ERP.Src.Infraestructure.Data;
@@ -9,10 +10,12 @@ namespace ERP.Src.Application.Services
     public class LancamentoService : ILancamentoService
     {
         private readonly AppDbContext _context;
+        private readonly IHistoricoAlteracaoService _historicoService;
 
-        public LancamentoService(AppDbContext context)
+        public LancamentoService(AppDbContext context, IHistoricoAlteracaoService historicoService)
         {
             _context = context;
+            _historicoService = historicoService;
         }
 
         public async Task<LancamentoDto> CreateAsync(CreateLancamentoDto dto, int userId)
@@ -35,6 +38,16 @@ namespace ERP.Src.Application.Services
 
             _context.Lancamentos.Add(lancamento);
             await _context.SaveChangesAsync();
+
+            await HistoricoHelper.RegistrarAsync(
+                _historicoService,
+                userId,
+                "TAB_Lancamento",
+                "Des_Lancamento",
+                "CREATE",
+                $"Lançamento criado: {dto.DescricaoLancamento} - Valor {dto.ValorLancamentoPrevisto:C}",
+                lancamento.IdLancamento
+            );
 
             return MapToDto(lancamento);
         }
@@ -67,6 +80,16 @@ namespace ERP.Src.Application.Services
 
             await _context.SaveChangesAsync();
 
+            await HistoricoHelper.RegistrarAsync(
+                _historicoService,
+                userId,
+                "TAB_Lancamento",
+                "Des_Lancamento",
+                "UPDATE",
+                $"Lançamento {lancamento.IdLancamento} atualizado.",
+                lancamento.IdLancamento
+            );
+
             return MapToDto(lancamento);
         }
 
@@ -80,7 +103,6 @@ namespace ERP.Src.Application.Services
             lancamento.DataAlteracao = DateTime.Now;
 
             await _context.SaveChangesAsync();
-
             return true;
         }
 

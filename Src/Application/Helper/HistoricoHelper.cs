@@ -11,7 +11,7 @@ namespace ERP.Src.Application.Helper
             string coluna,
             string tipo,
             string descricao,
-            int? idReferencia = null)
+            int? idReferencia = null)       
         {
             await historicoService.RegistrarAsync(
                 idLogin: userId,
